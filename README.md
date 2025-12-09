@@ -1,2 +1,10 @@
-# Quizz-app
-React app using OTSB API
+# React Quizz app 
+
+## Technologies Used
+
+- React
+- JavaScript
+- HTML
+- Tailwind CSS
+- Vite
+- OTDB API
