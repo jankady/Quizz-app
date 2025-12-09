@@ -6,12 +6,45 @@
     --color-right: #94D7A2;
     --color-wrong: #F8BCBC;
     --color-neutral: #D6DBF5;
+    --color-button: #4D5B9E;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: karla, sans-serif;
-    background: var(--color-background);
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: var(--color-background);
+        box-sizing: border-box;
+        font-family: karla, sans-serif;
+    }
+
+}
+
+.yellow-circle {
+    background: #fffad0;
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: 100%;
+    border-radius: 38%;
+    z-index: -1;
+}
+.blue-circle {
+    background: #ddebf8;
+    position: absolute;
+    left: -100px;
+    bottom: -100px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    rotate: 37deg;
+    z-index: -1;
 }
