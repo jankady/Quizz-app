@@ -69,10 +69,7 @@ function App() {
             return
         }
 
-
         setGameScreen(2)
-
-
     }
 
     const quizQuestions = questions.map((questionData) => {
@@ -87,7 +84,13 @@ function App() {
         />)
     })
 
-    const totalAnwsersRight =1
+    const totalAnwsersRight = questions.reduce((total, question) => {
+        if (question.anwsers[question.active] === question.correct_answer) {
+            return total + 1
+        } else {
+            return total
+        }
+    }, 0)
 
     return (<main
         className="text-center  text-primary flex flex-col justify-start pt-30 items-center min-h-screen px-4 gap-2 text-lg">
@@ -107,11 +110,15 @@ function App() {
 
         {/*Anwser Screen*/}
         {gameScreen === 2 && quizQuestions}
-        {gameScreen === 2 && <button
-            onClick={startQuiz} className="bg-button mt-3 rounded-lg
+        {gameScreen === 2 && <div className="flex items-center align-middle gap-3">
+            <p className="text-primary font-bold tracking-wider">You scored {totalAnwsersRight}/5 correct answers</p>
+            <button
+                onClick={startQuiz} className="bg-button rounded-lg
               text-background px-6 py-2 hover:cursor-pointer hover:text-primary">
-            Play again
-        </button>}
+                Play again
+            </button>
+        </div>
+        }
     </main>)
 }
 

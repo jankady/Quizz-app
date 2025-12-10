@@ -1,5 +1,4 @@
 
-
 export default function Question(props)
 {
     const answersElements = props.anwsers.map((oneAnswer, index)=>{
