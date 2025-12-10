@@ -14,3 +14,23 @@ Fun and interactive Quiz app, where you get 5 questions from the Open Trivia Dat
 - Tailwind CSS
 - Vite
 - OTDB API
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jankady/Quizz-app
+    cd quizz-app
+    ```
+2. Install dependencies:
+3. ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev / npm start
+   ```
+5. Open your browser and navigate to `http://localhost:3000` to view the
+
+# Scrimba Project
+
+Build as part of the [Scrimba React Developer Career Path](https://scrimba.com/learn-react-c0e).
