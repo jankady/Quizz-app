@@ -6,6 +6,7 @@ function App() {
     const [gameScreen, setGameScreen] = React.useState(0)
     const [questions, setQuestions] = React.useState([])
 
+    const isOver = gameScreen === 2
 
     function shuffleAnwsers(correct_answer, incorrect_answers) {
         const random = Math.floor(Math.random() * (incorrect_answers.length + 1))
@@ -14,25 +15,26 @@ function App() {
     }
 
     function toggleButton(id, selectedAnwser) {
-        setQuestions(prevQuestions =>{
-            return prevQuestions.map((question) => {
-                if(question.id === id){
-                    for (let i = 0; i < 4; i++) {
-                        if (selectedAnwser === question.anwsers[i]) {
-                            return {
-                                ...question,
-                                active: i
+        if (!isOver) {
+            setQuestions(prevQuestions => {
+                return prevQuestions.map((question) => {
+                    if (question.id === id) {
+                        for (let i = 0; i < 4; i++) {
+                            if (selectedAnwser === question.anwsers[i]) {
+                                return {
+                                    ...question, active: i
+                                }
                             }
                         }
+                        return {
+                            ...question, active: -1
+                        }
                     }
-                    return{
-                        ...question,
-                        active: -1
-                    }
-                }
-                return question
+                    return question
+                })
             })
-        })
+
+        }
     }
 
     async function startQuiz() {
@@ -41,19 +43,17 @@ function App() {
         try {
             const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple&encode=url3986")
             const data = await response.json()
-            setQuestions(
-                data.results.map((questionData, index) => {
-                    const anwsers = shuffleAnwsers(questionData.correct_answer, questionData.incorrect_answers)
-                        return {
-                            id: index,
-                            question: decodeURIComponent(questionData.question),
-                            correct_answer: decodeURIComponent(questionData.correct_answer),
-                            incorrect_answers: questionData.incorrect_answers.map((answ) => decodeURIComponent(answ)),
-                            anwsers: anwsers,
-                            active: -1,
-                        }
-                    }
-                ))
+            setQuestions(data.results.map((questionData, index) => {
+                const anwsers = shuffleAnwsers(questionData.correct_answer, questionData.incorrect_answers)
+                return {
+                    id: index,
+                    question: decodeURIComponent(questionData.question),
+                    correct_answer: decodeURIComponent(questionData.correct_answer),
+                    incorrect_answers: questionData.incorrect_answers.map((answ) => decodeURIComponent(answ)),
+                    anwsers: anwsers,
+                    active: -1,
+                }
+            }))
 
             setGameScreen(1)
         } catch (error) {
@@ -63,6 +63,15 @@ function App() {
     }
 
     function checkAnwsers() {
+        const allAnswered = questions.every((question) => question.active !== -1)
+        if (!allAnswered) {
+            alert("Please answer all questions before checking answers.")
+            return
+        }
+
+
+        setGameScreen(2)
+
 
     }
 
@@ -73,32 +82,37 @@ function App() {
             anwsers={questionData.anwsers}
             rightAnwser={questionData.correct_answer}
             active={questionData.active}
-            toggleButton={(selectedAnwser)=> toggleButton(questionData.id,selectedAnwser)}
+            toggleButton={(selectedAnwser) => toggleButton(questionData.id, selectedAnwser)}
+            isOver={isOver}
         />)
     })
 
-    return (
-        <main
-            className="text-center  text-primary flex flex-col justify-start pt-30 items-center min-h-screen px-4 gap-2 text-lg">
-            {/*Main Menu*/}
-            {gameScreen === 0 ? <h1 className="font-bold text-2xl">Quizzical</h1> : null}
-            {gameScreen === 0 ? <p className="text-m font-light">Some description if needed</p> : null}
-            {gameScreen === 0 ? <button onClick={startQuiz} className="bg-button mt-3 rounded-lg
-              text-background px-6 py-2 hover:cursor-pointer">Start quiz</button> : null}
+    const totalAnwsersRight =1
 
-            {/*Quiz Screen*/}
-            {gameScreen === 1 && quizQuestions}
-            {gameScreen === 1 && <button
-                onClick={checkAnwsers} className="bg-button mt-3 rounded-lg
-              text-background px-6 py-2 hover:cursor-pointer"
-            >
-                Check answers
-            </button>}
+    return (<main
+        className="text-center  text-primary flex flex-col justify-start pt-30 items-center min-h-screen px-4 gap-2 text-lg">
+        {/*Main Menu*/}
+        {gameScreen === 0 ? <h1 className="font-bold text-2xl">Quizzical</h1> : null}
+        {gameScreen === 0 ? <p className="text-m font-light">Some description if needed</p> : null}
+        {gameScreen === 0 ? <button onClick={startQuiz} className="bg-button mt-3 rounded-lg
+              text-background px-6 py-2 hover:cursor-pointer  hover:text-primary">Start quiz</button> : null}
 
-            {/*Anwser Screen*/}
+        {/*Quiz Screen*/}
+        {gameScreen === 1 && quizQuestions}
+        {gameScreen === 1 && <button
+            onClick={checkAnwsers} className="bg-button mt-3 rounded-lg
+              text-background px-6 py-2 hover:cursor-pointer hover:text-primary">
+            Check answers
+        </button>}
 
-        </main>
-    )
+        {/*Anwser Screen*/}
+        {gameScreen === 2 && quizQuestions}
+        {gameScreen === 2 && <button
+            onClick={startQuiz} className="bg-button mt-3 rounded-lg
+              text-background px-6 py-2 hover:cursor-pointer hover:text-primary">
+            Play again
+        </button>}
+    </main>)
 }
 
 export default App

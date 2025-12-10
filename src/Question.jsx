@@ -2,19 +2,21 @@
 
 export default function Question(props)
 {
-
-    console.log(props.active)
     const answersElements = props.anwsers.map((oneAnswer, index)=>{
 
-        const styles = props.active === index ? "bg-button_bg text-primary border-1 border-button_bg rounded-2xl px-4 py-1 mx-2 hover:cursor-pointer " +
-            "hover:bg-button_bg hover:border-button transition-colors "
-            : "bg-background text-primary border-1 border-button rounded-2xl px-4 py-1 mx-2 hover:cursor-pointer " +
-            "hover:bg-button_bg hover:border-button transition-colors "
+        const activeStyle = props.active === index ? "bg-button_bg " : "bg-background "
+        const wasRightStyle = props.isOver && props.active === index ?
+            (oneAnswer === props.rightAnwser? "bg-right border-right opacity-100 " :
+                "bg-wrong border-wrong opacity-50 "): ""
+        const isOverStyle = props.isOver ? "opacity-50 " : ""
+        const markRightStyle = props.isOver && oneAnswer === props.rightAnwser && props.active !== index ? "bg-right border-right opacity-100 " : ""
 
         return(
-            <button className={styles}
+            <button className={"text-primary border-1 border-button_bg rounded-2xl px-4 py-1 mx-2 hover:cursor-pointer " +
+                "hover:bg-button_bg hover:border-button transition-colors " + isOverStyle + activeStyle + wasRightStyle + markRightStyle}
                     onClick={()=>props.toggleButton(oneAnswer)}
                     key={oneAnswer}
+                    disabled={props.isOver}
              >
                 {oneAnswer}
 
